@@ -2,10 +2,12 @@ import React from "react";
 
 import { StyledButton } from "./timer-button.styles";
 
-function TimerButton({ children }) {
+function TimerButton({ children, onClick }) {
   return (
     <>
-      <StyledButton type="button">{children}</StyledButton>
+      <StyledButton onClick={onClick} type="button">
+        {children}
+      </StyledButton>
     </>
   );
 }

@@ -2,10 +2,16 @@ import React from "react";
 
 import { StyledInput } from "./number-input.styles";
 
-function NumberInput({ placeholder }) {
+function NumberInput({ placeholder, value, onChange, name }) {
   return (
     <>
-      <StyledInput placeholder={placeholder} type="number" />
+      <StyledInput
+        name={name}
+        placeholder={placeholder}
+        type="number"
+        value={value}
+        onChange={onChange}
+      />
     </>
   );
 }
