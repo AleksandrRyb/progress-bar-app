@@ -1,7 +1,13 @@
 import React from "react";
 
+import { ProgressContainer, ProgressDone } from "./progress-bar.styles";
+
 function ProgressBar() {
-  return <div></div>;
+  return (
+    <ProgressContainer>
+      <ProgressDone />
+    </ProgressContainer>
+  );
 }
 
 export { ProgressBar };

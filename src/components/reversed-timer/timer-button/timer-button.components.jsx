@@ -1,9 +1,11 @@
 import React from "react";
 
-function TimerButton() {
+import { StyledButton } from "./timer-button.styles";
+
+function TimerButton({ children }) {
   return (
     <>
-      <button></button>
+      <StyledButton type="button">{children}</StyledButton>
     </>
   );
 }

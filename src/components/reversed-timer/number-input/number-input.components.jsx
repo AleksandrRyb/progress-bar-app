@@ -1,9 +1,11 @@
 import React from "react";
 
-function NumberInput() {
+import { StyledInput } from "./number-input.styles";
+
+function NumberInput({ placeholder }) {
   return (
     <>
-      <input type="number" />
+      <StyledInput placeholder={placeholder} type="number" />
     </>
   );
 }
