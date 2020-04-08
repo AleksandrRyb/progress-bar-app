@@ -18,10 +18,11 @@ class ReversedTimer extends React.Component {
     minutes: "",
     seconds: "",
     total: null,
+    spentTime: null,
     start: 0,
     done: 0,
-    timerId: null,
-    stop: false,
+    timerIdPlay: null,
+    timerIdStop: null,
   };
 
   handleChange = (e) => {
@@ -29,8 +30,8 @@ class ReversedTimer extends React.Component {
   };
 
   handlePlay = () => {
-    this.setState({ stop: false });
-    const { minutes, seconds, stop } = this.state;
+    const { minutes, seconds, timerIdStop, spentTime, total } = this.state;
+    clearInterval(timerIdStop);
     const newMinutes = Number.parseInt(minutes);
     const newSeconds = Number.parseInt(seconds);
     let totalSeconds;
@@ -43,28 +44,40 @@ class ReversedTimer extends React.Component {
     }
 
     let timerId = setInterval(() => {
-      this.setState({ timerId });
-
-      totalSeconds = -1;
       const timeLeft = this.state.total - 1;
       if (timeLeft === 0) {
+        console.log("fafe");
         clearInterval(timerId);
       }
       this.setState({ total: timeLeft });
     }, 1000);
 
-    if (!stop) {
-      this.setState({ total: totalSeconds });
+    if (!spentTime) {
+      this.setState({ spentTime: totalSeconds });
+    }
+
+    if (!total) {
+      this.setState({
+        timerIdPlay: timerId,
+        total: totalSeconds,
+      });
     }
   };
 
   handleStop = () => {
-    this.setState({ stop: true });
-    clearInterval(this.state.timerId);
+    if (this.state.total > 0) {
+      clearInterval(this.state.timerIdPlay);
+      let timerId = setInterval(() => {
+        const spentTime = this.state.spentTime + 1;
+        this.setState({ spentTime });
+      }, 1000);
+
+      this.setState({ timerIdStop: timerId });
+    }
   };
 
   render() {
-    console.log(this.state.timerId);
+    console.log(this.state.spentTime);
     const { start, done, seconds, minutes, total } = this.state;
 
     return (
