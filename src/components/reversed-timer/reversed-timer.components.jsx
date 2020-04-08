@@ -120,14 +120,14 @@ class Timer extends React.Component {
         <Container>
           <InputContainer>
             <NumberInput
-              disabled={progress > 0 && true}
+              disabled={progress > 0}
               placeholder="Minutes"
               value={minutes}
               name="minutes"
               onChange={this.handleChange}
             />
             <NumberInput
-              disabled={progress > 0 && true}
+              disabled={progress > 0}
               placeholder="Seconds"
               value={seconds}
               onChange={this.handleChange}
