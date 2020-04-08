@@ -22,9 +22,7 @@ const INITIAL_STATE = {
   progress: 0,
   play: false,
   total: null,
-  spentTimeTotal: null,
-  timerIdPlay: null,
-  timerIdStop: null,
+  timerId: null,
   startDate: null,
 };
 
@@ -37,9 +35,7 @@ class Timer extends React.Component {
       progress: 0,
       play: false,
       total: null,
-      spentTimeTotal: null,
-      timerIdPlay: null,
-      timerIdStop: null,
+      timerId: null,
       startDate: null,
     };
   }
@@ -50,8 +46,8 @@ class Timer extends React.Component {
 
   handlePlay = () => {
     this.setState({ play: true });
-    const { minutes, seconds, timerIdStop, spentTimeTotal, total } = this.state;
-    clearInterval(timerIdStop);
+    const { minutes, seconds, total, timerId } = this.state;
+    clearInterval(timerId);
     const newMinutes = Number.parseInt(minutes);
     const newSeconds = Number.parseInt(seconds);
     let totalSeconds;
@@ -63,17 +59,18 @@ class Timer extends React.Component {
       totalSeconds = newSeconds;
     }
 
-    let timerId = setInterval(() => {
+    let newTimerId = setInterval(() => {
+      this.setState({ timerId: newTimerId });
       const timeLeft = this.state.total - 1;
       if (timeLeft === 0) {
-        const { startDate, progress, spentTimeTotal } = this.state;
+        const { startDate, progress } = this.state;
         const item = {
           startDate,
           endDate: new Date(),
           time: progress,
-          spentTimeTotal,
+          spentTimeTotal: Math.floor((new Date() - startDate) / 1000),
         };
-        clearInterval(timerId);
+        clearInterval(newTimerId);
         setTimeout(() => {
           this.props.addItem(item);
           this.setState(INITIAL_STATE);
@@ -82,14 +79,10 @@ class Timer extends React.Component {
       this.setState({ total: timeLeft });
     }, 1000);
 
-    if (!spentTimeTotal) {
-      this.setState({ spentTimeTotal: totalSeconds });
-    }
-
     if (!total) {
       this.setState({
         startDate: new Date(),
-        timerIdPlay: timerId,
+        timerId: newTimerId,
         progress: totalSeconds,
         total: totalSeconds,
       });
@@ -97,16 +90,8 @@ class Timer extends React.Component {
   };
 
   handleStop = () => {
-    if (this.state.total > 0) {
-      this.setState({ play: false });
-      clearInterval(this.state.timerIdPlay);
-      let timerId = setInterval(() => {
-        const spentTimeTotal = this.state.spentTimeTotal + 1;
-        this.setState({ spentTimeTotal });
-      }, 1000);
-
-      this.setState({ timerIdStop: timerId });
-    }
+    clearInterval(this.state.timerId);
+    this.setState({ play: false });
   };
 
   render() {
@@ -135,7 +120,7 @@ class Timer extends React.Component {
             <TimerButton onClick={this.handlePlay} disabled={play}>
               <FaPlay />
             </TimerButton>
-            <TimerButton onClick={this.handleStop} disabled={!play && true}>
+            <TimerButton onClick={this.handleStop} disabled={!play}>
               <FaStop />
             </TimerButton>
           </ButtonContainer>
