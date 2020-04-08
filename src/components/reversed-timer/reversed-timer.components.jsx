@@ -13,6 +13,16 @@ import {
   ProgressContainer,
 } from "./reversed-timer.styles";
 
+const INITIAL_STATE = {
+  minutes: "",
+  seconds: "",
+  progress: 0,
+  total: null,
+  spentTime: null,
+  timerIdPlay: null,
+  timerIdStop: null,
+};
+
 class ReversedTimer extends React.Component {
   state = {
     minutes: "",
@@ -46,6 +56,9 @@ class ReversedTimer extends React.Component {
       const timeLeft = this.state.total - 1;
       if (timeLeft === 0) {
         clearInterval(timerId);
+        setTimeout(() => {
+          this.setState(INITIAL_STATE);
+        }, 2000);
       }
       this.setState({ total: timeLeft });
     }, 1000);
@@ -83,14 +96,14 @@ class ReversedTimer extends React.Component {
         <Container>
           <InputContainer>
             <NumberInput
-              disabled={total}
+              disabled={progress}
               placeholder="Minutes"
               value={minutes}
               name="minutes"
               onChange={this.handleChange}
             />
             <NumberInput
-              disabled={total}
+              disabled={progress}
               placeholder="Seconds"
               value={seconds}
               onChange={this.handleChange}
