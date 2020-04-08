@@ -107,7 +107,6 @@ class Timer extends React.Component {
 
   render() {
     const { seconds, minutes, total, progress } = this.state;
-    console.log(this.props);
     return (
       <Root>
         <Container>
