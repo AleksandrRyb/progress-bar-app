@@ -40,6 +40,10 @@ class Timer extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    clearInterval(this.state.timerId);
+  }
+
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
