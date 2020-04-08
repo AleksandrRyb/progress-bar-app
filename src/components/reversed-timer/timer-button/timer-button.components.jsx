@@ -4,11 +4,9 @@ import { StyledButton } from "./timer-button.styles";
 
 function TimerButton({ children, onClick }) {
   return (
-    <>
-      <StyledButton onClick={onClick} type="button">
-        {children}
-      </StyledButton>
-    </>
+    <StyledButton onClick={onClick} type="button">
+      {children}
+    </StyledButton>
   );
 }
 

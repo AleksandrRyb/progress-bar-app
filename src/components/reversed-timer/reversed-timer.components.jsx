@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaPlay, FaStop } from "react-icons/fa";
 
 import { TimerButton } from "./timer-button";
@@ -13,83 +13,95 @@ import {
   ProgressContainer,
 } from "./reversed-timer.styles";
 
-const defaultTime = {
-  minutes: "",
-  seconds: "",
-  total: 0,
-};
-
-const defaultProgress = {
-  start: 0,
-  done: 0,
-};
-
-function ReversedTimer() {
-  const [time, setTime] = useState(defaultTime);
-  const [progress, setProgress] = useState(defaultProgress);
-
-  const handleChange = (e) => {
-    setTime({
-      ...time,
-      [e.target.name]: e.target.value,
-    });
+class ReversedTimer extends React.Component {
+  state = {
+    minutes: "",
+    seconds: "",
+    total: null,
+    start: 0,
+    done: 0,
+    timerId: null,
+    stop: false,
   };
 
-  const handlePlay = () => {
-    const { minutes, seconds } = time;
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handlePlay = () => {
+    this.setState({ stop: false });
+    const { minutes, seconds, stop } = this.state;
     const newMinutes = Number.parseInt(minutes);
     const newSeconds = Number.parseInt(seconds);
-    let totalInSeconds;
+    let totalSeconds;
     if (newMinutes && newSeconds) {
-      totalInSeconds = newMinutes * 60 + newSeconds;
+      totalSeconds = newMinutes * 60 + newSeconds;
     } else if (newMinutes && !newSeconds) {
-      totalInSeconds = newMinutes * 60;
+      totalSeconds = newMinutes * 60;
     } else {
-      totalInSeconds = newSeconds;
+      totalSeconds = newSeconds;
     }
 
-    if (!time.total) {
-      setTime({ ...time, total: totalInSeconds });
-    }
-    setTime((prevTime) => prevTime.total - 1);
+    let timerId = setInterval(() => {
+      this.setState({ timerId });
 
-    if (!progress.done) {
-      setProgress({ progress, done: totalInSeconds });
+      totalSeconds = -1;
+      const timeLeft = this.state.total - 1;
+      if (timeLeft === 0) {
+        clearInterval(timerId);
+      }
+      this.setState({ total: timeLeft });
+    }, 1000);
+
+    if (!stop) {
+      this.setState({ total: totalSeconds });
     }
-    setProgress((prevProgress) => prevProgress.start + 1);
   };
 
-  return (
-    <Root>
-      <Container>
-        <InputContainer>
-          <NumberInput
-            placeholder="Minutes"
-            value={time.minutes}
-            name="minutes"
-            onChange={handleChange}
-          />
-          <NumberInput
-            placeholder="Seconds"
-            value={time.seconds}
-            onChange={handleChange}
-            name="seconds"
-          />
-        </InputContainer>
-        <ButtonContainer>
-          <TimerButton onClick={handlePlay}>
-            <FaPlay />
-          </TimerButton>
-          <TimerButton>
-            <FaStop />
-          </TimerButton>
-        </ButtonContainer>
-        <ProgressContainer>
-          <ProgressBar start={progress.start} done={progress.done} />
-        </ProgressContainer>
-      </Container>
-    </Root>
-  );
+  handleStop = () => {
+    this.setState({ stop: true });
+    clearInterval(this.state.timerId);
+  };
+
+  render() {
+    console.log(this.state.timerId);
+    const { start, done, seconds, minutes, total } = this.state;
+
+    return (
+      <Root>
+        <Container>
+          <InputContainer>
+            <NumberInput
+              disabled={total}
+              placeholder="Minutes"
+              value={minutes}
+              name="minutes"
+              onChange={this.handleChange}
+            />
+            <NumberInput
+              disabled={total}
+              placeholder="Seconds"
+              value={seconds}
+              onChange={this.handleChange}
+              name="seconds"
+            />
+          </InputContainer>
+          <div style={{ color: "#fff" }}>{total ? `${total} sec` : "0"}</div>
+          <ButtonContainer>
+            <TimerButton onClick={this.handlePlay}>
+              <FaPlay />
+            </TimerButton>
+            <TimerButton onClick={this.handleStop}>
+              <FaStop />
+            </TimerButton>
+          </ButtonContainer>
+          <ProgressContainer>
+            <ProgressBar start={start} done={done} />
+          </ProgressContainer>
+        </Container>
+      </Root>
+    );
+  }
 }
 
 export { ReversedTimer };

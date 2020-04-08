@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Root = styled.div`
-  margin-top: 30%;
+  margin-top: 20%;
   display: inline-block;
 `;
 
@@ -19,7 +19,7 @@ export const InputContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 2%;
-  margin-bottom: 10%;
+  margin-bottom: 6%;
 `;
 
 export const ProgressContainer = styled.div`
