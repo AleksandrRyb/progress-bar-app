@@ -17,7 +17,7 @@ export const ProgressDone = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: ${(props) => (props.percentage ? props.percentage + "%" : 0)};
+  /* width: ${(props) => (props.percentage ? props.percentage + "%" : 0)}; */
   opacity: 1;
   transition: 1s ease 0.3s;
 `;

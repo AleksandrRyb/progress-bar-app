@@ -17,10 +17,9 @@ class ReversedTimer extends React.Component {
   state = {
     minutes: "",
     seconds: "",
+    progress: 0,
     total: null,
     spentTime: null,
-    start: 0,
-    done: 0,
     timerIdPlay: null,
     timerIdStop: null,
   };
@@ -46,7 +45,6 @@ class ReversedTimer extends React.Component {
     let timerId = setInterval(() => {
       const timeLeft = this.state.total - 1;
       if (timeLeft === 0) {
-        console.log("fafe");
         clearInterval(timerId);
       }
       this.setState({ total: timeLeft });
@@ -59,6 +57,7 @@ class ReversedTimer extends React.Component {
     if (!total) {
       this.setState({
         timerIdPlay: timerId,
+        progress: totalSeconds,
         total: totalSeconds,
       });
     }
@@ -77,8 +76,7 @@ class ReversedTimer extends React.Component {
   };
 
   render() {
-    console.log(this.state.spentTime);
-    const { start, done, seconds, minutes, total } = this.state;
+    const { seconds, minutes, total, progress } = this.state;
 
     return (
       <Root>
@@ -109,7 +107,7 @@ class ReversedTimer extends React.Component {
             </TimerButton>
           </ButtonContainer>
           <ProgressContainer>
-            <ProgressBar start={start} done={done} />
+            <ProgressBar total={total} progress={progress} />
           </ProgressContainer>
         </Container>
       </Root>
