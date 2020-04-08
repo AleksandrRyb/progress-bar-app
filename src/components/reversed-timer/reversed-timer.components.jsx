@@ -47,49 +47,57 @@ class Timer extends React.Component {
   };
 
   handlePlay = () => {
-    const { minutes, seconds, timerIdStop, spentTimeTotal, total } = this.state;
-    clearInterval(timerIdStop);
-    const newMinutes = Number.parseInt(minutes);
-    const newSeconds = Number.parseInt(seconds);
-    let totalSeconds;
-    if (newMinutes && newSeconds) {
-      totalSeconds = newMinutes * 60 + newSeconds;
-    } else if (newMinutes && !newSeconds) {
-      totalSeconds = newMinutes * 60;
-    } else {
-      totalSeconds = newSeconds;
-    }
-
-    let timerId = setInterval(() => {
-      const timeLeft = this.state.total - 1;
-      if (timeLeft === 0) {
-        const { startDate, progress, spentTimeTotal } = this.state;
-        const item = {
-          startDate,
-          endDate: new Date(),
-          time: progress,
-          spentTimeTotal,
-        };
-        clearInterval(timerId);
-        setTimeout(() => {
-          this.props.addItem(item);
-          this.setState(INITIAL_STATE);
-        }, 2000);
+    if (this.state.total === null) {
+      const {
+        minutes,
+        seconds,
+        timerIdStop,
+        spentTimeTotal,
+        total,
+      } = this.state;
+      clearInterval(timerIdStop);
+      const newMinutes = Number.parseInt(minutes);
+      const newSeconds = Number.parseInt(seconds);
+      let totalSeconds;
+      if (newMinutes && newSeconds) {
+        totalSeconds = newMinutes * 60 + newSeconds;
+      } else if (newMinutes && !newSeconds) {
+        totalSeconds = newMinutes * 60;
+      } else {
+        totalSeconds = newSeconds;
       }
-      this.setState({ total: timeLeft });
-    }, 1000);
 
-    if (!spentTimeTotal) {
-      this.setState({ spentTimeTotal: totalSeconds });
-    }
+      let timerId = setInterval(() => {
+        const timeLeft = this.state.total - 1;
+        if (timeLeft === 0) {
+          const { startDate, progress, spentTimeTotal } = this.state;
+          const item = {
+            startDate,
+            endDate: new Date(),
+            time: progress,
+            spentTimeTotal,
+          };
+          clearInterval(timerId);
+          setTimeout(() => {
+            this.props.addItem(item);
+            this.setState(INITIAL_STATE);
+          }, 2000);
+        }
+        this.setState({ total: timeLeft });
+      }, 1000);
 
-    if (!total) {
-      this.setState({
-        startDate: new Date(),
-        timerIdPlay: timerId,
-        progress: totalSeconds,
-        total: totalSeconds,
-      });
+      if (!spentTimeTotal) {
+        this.setState({ spentTimeTotal: totalSeconds });
+      }
+
+      if (!total) {
+        this.setState({
+          startDate: new Date(),
+          timerIdPlay: timerId,
+          progress: totalSeconds,
+          total: totalSeconds,
+        });
+      }
     }
   };
 
