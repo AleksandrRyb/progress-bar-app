@@ -70,9 +70,9 @@ class Timer extends React.Component {
           time: progress,
           spentTimeTotal,
         };
-        this.props.addItem(item);
         clearInterval(timerId);
         setTimeout(() => {
+          this.props.addItem(item);
           this.setState(INITIAL_STATE);
         }, 2000);
       }
