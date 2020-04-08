@@ -5,7 +5,7 @@ const INITIAL_STATE = [];
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case ADD_ITEM:
-      return [...state, action.payload];
+      return [action.payload, ...state];
     default:
       return state;
   }
